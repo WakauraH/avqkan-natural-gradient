@@ -10,7 +10,7 @@ plt.rcParams.update({"font.size": 11, "font.family": "serif",
                      "axes.spines.top": False, "axes.spines.right": False})
 CL = {"legacy": "#999999", "cobyla": "#1f77b4", "gd": "#2ca02c",
       "ite": "#d62728", "ite_spsa": "#9467bd", "fidonly": "#555555"}
-LB = {"legacy": "fidelity obj. (v1 impl.)", "cobyla": "COBYLA",
+LB = {"legacy": "fidelity objective", "cobyla": "COBYLA",
       "gd": "gradient descent", "ite": "natural gradient (QNG)",
       "ite_spsa": "QN-SPSA"}
 
@@ -42,7 +42,7 @@ for i, m in enumerate(["legacy", "cobyla", "gd", "ite"]):
     er = [sd(es(f"results/{m}_{t}_seedSEED.csv")) for t in TGT]
     ax[0].bar(np.arange(5) + (i - 1.5) * w, mu, w, yerr=er, capsize=2,
               color=CL[m], label=LB[m])
-ax[0].set_xticks(range(5)); ax[0].set_xticklabels(["Eq.(8)", "log", "frac", "radius", "exp"])
+ax[0].set_xticks(range(5)); ax[0].set_xticklabels(["$f_1$", "log", "frac", "radius", "exp"])
 ax[0].set_ylabel("Test error at training-cost early stop")
 ax[0].legend(fontsize=8); ax[0].set_title("(a) Five targets, 10 seeds")
 for m in ["legacy", "cobyla", "gd", "ite"]:
@@ -51,7 +51,7 @@ for m in ["legacy", "cobyla", "gd", "ite"]:
     ax[1].fill_between(t, np.percentile(Y, 25, 0), np.percentile(Y, 75, 0),
                        color=CL[m], alpha=0.15)
 ax[1].set_xlabel(r"Imaginary time $\tau$"); ax[1].set_ylabel("Test error")
-ax[1].set_title("(b) Trajectories on Eq.(8), median & IQR")
+ax[1].set_title("(b) Trajectories on $f_1$, median & IQR")
 fig.tight_layout(); fig.savefig(f"{OUT}/fig_main.png", dpi=200); plt.close(fig)
 
 # ---- Fig 2: budget sweep ----------------------------------------------------
@@ -70,7 +70,7 @@ for k, tgt in enumerate(["eq6", "log"]):
     ax[k].errorbar([ICALL[tgt]], [I.mean()], yerr=[sd(I)], marker="*", ms=16,
                    color=CL["ite"], label="natural gradient", capsize=3)
     ax[k].set_xscale("log"); ax[k].set_xlabel("Circuit evaluations (optimization only)")
-    ax[k].set_title(f"({'ab'[k]}) {'Eq.(8)' if tgt == 'eq6' else 'log target'}")
+    ax[k].set_title(f"({'ab'[k]}) {'main benchmark $f_1$' if tgt == 'eq6' else 'log target'}")
 ax[0].set_ylabel("Test error at early stop"); ax[0].legend(fontsize=8)
 fig.tight_layout(); fig.savefig(f"{OUT}/fig_budget.png", dpi=200); plt.close(fig)
 
@@ -92,7 +92,7 @@ for gi, (glab, ipat, cpat) in enumerate(groups):
               label="COBYLA (equal budget)" if gi == 0 else None)
 ax[0].set_xticks([0.5, 3.5, 6.5]); ax[0].set_xticklabels([g[0] for g in groups])
 ax[0].set_ylabel("Test error at early stop")
-ax[0].set_title("(a) Readout dependence, Eq.(8)\n(middle: range-halved single string)")
+ax[0].set_title("(a) Readout dependence, $f_1$\n(middle: range-halved single string)")
 ax[0].legend(fontsize=8)
 
 NQ = [4, 6, 8, 10, 12]
@@ -132,7 +132,7 @@ for m in ("cobyla", "gd", "ite", "ite_spsa"):
     ax[0].axhline(v0.mean(), color=CL[m], ls=":", lw=1)
 ax[0].set_xscale("log"); ax[0].set_xlabel("Shots per circuit evaluation")
 ax[0].set_ylabel("Test error at early stop")
-ax[0].set_title("(a) Finite shots, Eq.(8), $Z_0Z_1$\n(dotted: exact simulation)")
+ax[0].set_title("(a) Finite shots, $f_1$, $Z_0Z_1$\n(dotted: exact simulation)")
 ax[0].legend(fontsize=7)
 labels = ["exact\n(all)", "exact metric\n+clip+FD grad", r"FD $\eta{=}0.3$",
           r"FD $\eta{=}0.01$", "QN-SPSA", "no metric\n(GD)"]
